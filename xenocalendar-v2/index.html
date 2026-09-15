@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>XenoCalendar — Maroua's Daily Ritual</title>
+    <meta
+      name="description"
+      content="A gothic daily planner widget for xenorphia"
+    />
+    <meta name="theme-color" content="#1A1024" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chewy&family=Quicksand:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="widget-mode">
+    <button
+      id="widgetFab"
+      class="widget-fab"
+      hidden
+      type="button"
+      aria-label="Open XenoCalendar"
+    >
+      <span class="widget-fab-icon">♡</span>
+      <span class="widget-fab-label">XenoCalendar</span>
+    </button>
+
+    <div id="widgetShell" class="widget-shell">
+      <header class="widget-chrome" id="widgetDrag">
+        <div class="widget-title-row">
+          <span class="widget-brand">XenoCalendar</span>
+          <div class="widget-controls">
+            <button
+              type="button"
+              id="fullscreenBtn"
+              class="widget-ctrl"
+              title="Full screen"
+            >
+              ⛶
+            </button>
+            <button
+              type="button"
+              id="pinBtn"
+              class="widget-ctrl"
+              title="Move to corner"
+            >
+              ◢
+            </button>
+            <button
+              type="button"
+              id="minimizeBtn"
+              class="widget-ctrl"
+              title="Minimize"
+            >
+              −
+            </button>
+          </div>
+        </div>
+        <p class="widget-greeting" id="widgetGreeting">
+          Rise, Maroua — the night is yours.
+        </p>
+        <div class="progress-wrap" aria-label="Task progress">
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <span class="progress-label" id="progressLabel">0%</span>
+        </div>
+        <div class="toolbar">
+          <span id="syncBadge" class="sync-badge sync-local"
+            >● saved locally</span
+          >
+          <button
+            type="button"
+            id="historyBtn"
+            class="toolbar-btn"
+            title="View history"
+          >
+            🕐
+          </button>
+          <button
+            type="button"
+            id="syncBtn"
+            class="toolbar-btn"
+            title="Sync now"
+          >
+            ↻
+          </button>
+          <button
+            type="button"
+            id="exportBtn"
+            class="toolbar-btn"
+            title="Export backup"
+          >
+            ↓
+          </button>
+          <label class="toolbar-btn" title="Import backup">
+            ↑
+            <input
+              type="file"
+              id="importInput"
+              accept="application/json"
+              hidden
+            />
+          </label>
+        </div>
+      </header>
+
+      <div class="widget-viewport" id="widgetViewport">
+        <div class="bg-sparkles" aria-hidden="true"></div>
+        <div class="bg-decors" aria-hidden="true"></div>
+
+        <main id="stage">
+          <header class="intro">
+            <h1 aria-live="polite"></h1>
+          </header>
+
+          <div class="print-assembly">
+            <div class="printer-wrap">
+              <div class="printer" role="img" aria-label="Cute receipt printer">
+                <div class="printer-body">
+                  <div class="printer-slot"></div>
+                  <div class="printer-screen">
+                    <span class="printer-text">♡ print me ♡</span>
+                  </div>
+                  <div class="printer-keyboard"></div>
+                </div>
+                <div class="heart" aria-hidden="true">♡</div>
+              </div>
+            </div>
+
+            <article class="receipt" id="receipt">
+              <span class="receipt-date" id="receiptDate"></span>
+              <h2>My day</h2>
+              <label class="focus-card">
+                <span class="focus-label">Today's focus</span>
+                <input
+                  id="focusInput"
+                  type="text"
+                  placeholder="one thing that matters"
+                />
+              </label>
+              <hr />
+              <section class="receipt-section receipt-section-events">
+                <h3>Events</h3>
+                <ul class="events" id="eventsList"></ul>
+              </section>
+              <hr />
+              <section class="receipt-section receipt-section-todos">
+                <h3>To do</h3>
+                <ul class="todos" id="todosList"></ul>
+              </section>
+              <hr />
+              <section class="receipt-section receipt-section-notes">
+                <h3>Gym &amp; Food</h3>
+                <div class="protein-tracker">
+                  <div class="protein-row">
+                    <span class="protein-label">Protein</span>
+                    <span class="protein-amount" id="proteinAmount"
+                      >0g / 150g</span
+                    >
+                  </div>
+                  <div class="protein-track">
+                    <div class="protein-fill" id="proteinFill"></div>
+                  </div>
+                  <div class="protein-input-row">
+                    <input
+                      type="number"
+                      id="proteinInput"
+                      min="0"
+                      step="1"
+                      placeholder="grams eaten"
+                    />
+                    <button
+                      type="button"
+                      id="proteinAddBtn"
+                      class="mini-submit"
+                      title="Add to today's protein"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+                <div class="calorie-tracker">
+                  <div class="protein-row">
+                    <span class="protein-label">Calories</span>
+                    <span class="protein-amount" id="caloriesAmount"
+                      >0 / 3000 kcal</span
+                  </div>
+                  <div class="protein-track">
+                    <div class="protein-fill calories-fill" id="caloriesFill"></div>
+                  </div>
+                  <div class="protein-input-row">
+                    <input
+                      type="number"
+                      id="caloriesInput"
+                      min="0"
+                      step="1"
+                      placeholder="calories eaten"
+                    />
+                    <button
+                      type="button"
+                      id="caloriesAddBtn"
+                      class="mini-submit"
+                      title="Add today's calories"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+                <div class="notes-list" id="notesList"></div>
+                <form class="note-form" id="noteForm">
+                  <div class="note-options">
+                    <select id="noteFont" aria-label="Note font">
+                      <option value="dream">Dreams</option>
+                      <option value="angel">Angel</option>
+                      <option value="chewy">Chewy</option>
+                      <option value="gothic">Gothic</option>
+                    </select>
+                    <select id="noteCategory" aria-label="Note category">
+                      <option value="creative">Creative</option>
+                      <option value="gym">Gym</option>
+                      <option value="studies">Studies</option>
+                      <option value="careers">Careers</option>
+                      <option value="routine">Routine</option>
+                    </select>
+                    <div
+                      class="note-colors"
+                      role="group"
+                      aria-label="Note color"
+                    >
+                      <button
+                        type="button"
+                        class="note-color-option is-selected"
+                        data-color="pink"
+                        title="Pink"
+                      ></button>
+                      <button
+                        type="button"
+                        class="note-color-option"
+                        data-color="rose"
+                        title="Rose"
+                      ></button>
+                      <button
+                        type="button"
+                        class="note-color-option"
+                        data-color="lilac"
+                        title="Lilac"
+                      ></button>
+                      <button
+                        type="button"
+                        class="note-color-option"
+                        data-color="mint"
+                        title="Mint"
+                      ></button>
+                    </div>
+                  </div>
+                  <div class="note-compose">
+                    <textarea
+                      class="notes-area note-font-dream note-color-pink"
+                      id="noteInput"
+                      placeholder="Add a note..."
+                      rows="2"
+                    ></textarea>
+                    <button class="mini-submit" type="submit" title="Save note">
+                      +
+                    </button>
+                  </div>
+                </form>
+              </section>
+            </article>
+          </div>
+        </main>
+      </div>
+
+      <div class="history-overlay" id="historyOverlay">
+        <div class="history-header">
+          <span class="history-title">History</span>
+          <button
+            type="button"
+            id="historyCloseBtn"
+            class="widget-ctrl"
+            title="Close"
+          >
+            ×
+          </button>
+        </div>
+        <div class="history-list" id="historyList"></div>
+        <div class="history-detail" id="historyDetail" hidden>
+          <button type="button" id="historyBackBtn" class="history-back">
+            ← All days
+          </button>
+          <article class="receipt history-receipt" id="historyReceipt">
+            <span class="receipt-date" id="historyReceiptDate"></span>
+            <h2 id="historyReceiptTitle">My day</h2>
+            <hr />
+            <section class="receipt-section receipt-section-events">
+              <h3>Events</h3>
+              <ul class="events" id="historyEventsList"></ul>
+            </section>
+            <hr />
+            <section class="receipt-section receipt-section-todos">
+              <h3>To do</h3>
+              <ul class="todos" id="historyTodosList"></ul>
+            </section>
+            <hr />
+            <section class="receipt-section receipt-section-notes">
+              <h3>Gym &amp; Food</h3>
+              <div class="protein-row">
+                <span class="protein-label">Protein</span>
+                <span class="protein-amount" id="historyProteinAmount"
+                  >0g / 150g</span
+                >
+              </div>
+              <div class="protein-track">
+                <div class="protein-fill" id="historyProteinFill"></div>
+              </div>
+                <div class="protein-row history-calories-row">
+                  <span class="protein-label">Calories</span>
+                  <span class="protein-amount" id="historyCaloriesAmount"
+                    >0 / 3000 kcal</span
+                  >
+                </div>
+              <div class="history-notes-list" id="historyNotesText"></div>
+            </section>
+          </article>
+        </div>
+      </div>
+
+      <footer class="widget-footer">
+        <button id="printBtn" class="print-btn" type="button">
+          Summon scroll
+        </button>
+
+        <aside class="add-panel" id="addPanel" hidden>
+          <div class="add-tabs">
+            <button type="button" class="add-tab is-active" data-tab="task">
+              Task
+            </button>
+            <button type="button" class="add-tab" data-tab="event">
+              Event
+            </button>
+          </div>
+          <form id="addTaskForm" class="mini-form" data-panel="task">
+            <div class="mini-form-grid">
+              <input
+                name="label"
+                type="text"
+                placeholder="New task…"
+                required
+              />
+              <input name="link" type="url" placeholder="Link (optional)" />
+              <select name="category" aria-label="Category">
+                <option value="creative">Creative</option>
+                <option value="gym">Gym</option>
+                <option value="studies">Studies</option>
+                <option value="careers">Careers</option>
+                <option value="routine">Routine</option>
+              </select>
+            </div>
+            <button type="submit" class="mini-submit" title="Add task">
+              +
+            </button>
+          </form>
+          <form
+            id="addEventForm"
+            class="mini-form is-hidden"
+            data-panel="event"
+          >
+            <div class="mini-form-grid">
+              <input name="label" type="text" placeholder="Event" required />
+              <input name="time" type="text" placeholder="Time" />
+              <input name="link" type="url" placeholder="Link" />
+              <select name="category" aria-label="Category">
+                <option value="creative">Creative</option>
+                <option value="gym">Gym</option>
+                <option value="studies">Studies</option>
+                <option value="careers">Careers</option>
+                <option value="routine">Routine</option>
+              </select>
+            </div>
+            <button type="submit" class="mini-submit" title="Add event">
+              +
+            </button>
+          </form>
+        </aside>
+      </footer>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
