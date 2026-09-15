@@ -36,6 +36,32 @@
         <div class="widget-title-row">
           <span class="widget-brand">XenoCalendar</span>
           <div class="widget-controls">
+            <div class="notion-connect-wrap">
+              <button
+                type="button"
+                id="notionConnectBtn"
+                class="widget-ctrl notion-connect-btn"
+                title="Connect Notion"
+                aria-expanded="false"
+                aria-controls="notionConnectMenu"
+              >
+                N
+              </button>
+              <div id="notionConnectMenu" class="notion-connect-menu" hidden>
+                <strong>Connect Notion</strong>
+                <p>Set up Notion sync from your Vercel project.</p>
+                <a
+                  href="https://www.notion.so/my-integrations"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >Open Notion integrations <span aria-hidden="true">↗</span></a>
+                <small>
+                  Add <code>NOTION_TOKEN</code> and
+                  <code>NOTION_DATABASE_ID</code> in Vercel, then use the sync
+                  button here.
+                </small>
+              </div>
+            </div>
             <button
               type="button"
               id="fullscreenBtn"

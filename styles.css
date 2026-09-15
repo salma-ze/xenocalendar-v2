@@ -138,6 +138,77 @@ body.widget-fullscreen::before {
 .widget-controls {
   display: flex;
   gap: 4px;
+  position: relative;
+}
+
+.notion-connect-wrap {
+  position: relative;
+}
+
+.notion-connect-btn {
+  font-family: "Burton's Dreams", "Quicksand", serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.notion-connect-btn[aria-expanded="true"] {
+  background: var(--blood-bright);
+  color: var(--silver);
+}
+
+.notion-connect-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 30;
+  width: 230px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg-deep) 100%);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+  color: var(--silver);
+  cursor: default;
+}
+
+.notion-connect-menu[hidden] {
+  display: none;
+}
+
+.notion-connect-menu strong {
+  display: block;
+  color: var(--accent);
+  font-family: "Gothic War", Chewy, serif;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.notion-connect-menu p,
+.notion-connect-menu small {
+  display: block;
+  margin-top: 6px;
+  font-family: "Burton's Dreams", "Quicksand", serif;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.notion-connect-menu a {
+  display: block;
+  margin-top: 10px;
+  color: var(--accent);
+  font-family: "Burton's Dreams", "Quicksand", serif;
+  font-size: 10px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.notion-connect-menu a:hover {
+  color: #ffffff;
+}
+
+.notion-connect-menu code {
+  color: var(--accent);
+  font-size: 9px;
 }
 
 .widget-shell.is-dragging {

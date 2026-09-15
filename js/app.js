@@ -35,6 +35,8 @@ const widgetDrag = $("#widgetDrag");
 const fullscreenBtn = $("#fullscreenBtn");
 const pinBtn = $("#pinBtn");
 const minimizeBtn = $("#minimizeBtn");
+const notionConnectBtn = $("#notionConnectBtn");
+const notionConnectMenu = $("#notionConnectMenu");
 const widgetGreeting = $("#widgetGreeting");
 const progressFill = $("#progressFill");
 const progressLabel = $("#progressLabel");
@@ -913,6 +915,26 @@ historyCloseBtn.addEventListener("click", closeHistory);
 historyBackBtn.addEventListener("click", () => {
   historyDetail.style.display = "none";
   historyList.style.display = "flex";
+});
+
+function closeNotionMenu() {
+  notionConnectMenu.hidden = true;
+  notionConnectBtn.setAttribute("aria-expanded", "false");
+}
+
+notionConnectBtn.addEventListener("click", (event) => {
+  event.stopPropagation();
+  const isOpen = !notionConnectMenu.hidden;
+  notionConnectMenu.hidden = isOpen;
+  notionConnectBtn.setAttribute("aria-expanded", String(!isOpen));
+});
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".notion-connect-wrap")) closeNotionMenu();
+});
+
+notionConnectMenu.addEventListener("click", (event) => {
+  event.stopPropagation();
 });
 
 /* ---------------------------------------------------------- */
