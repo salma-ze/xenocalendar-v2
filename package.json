@@ -1,0 +1,10 @@
+{
+  "name": "xenocalendar",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive daily planner printer — tasks, events, and optional Notion sync",
+  "scripts": {
+    "dev": "npx serve . -p 3000",
+    "start": "npx serve . -p 3000"
+  }
+}
