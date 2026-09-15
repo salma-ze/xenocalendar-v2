@@ -2,12 +2,18 @@ import { config } from "./config.js";
 import {
   loadToday,
   saveDay,
+  mergeDays,
   listHistory,
   getDay,
   exportData,
   importFromFile,
 } from "./storage.js";
-import { fetchFromNotion, mergeNotionData } from "./sync.js";
+import {
+  fetchFromNotion,
+  mergeNotionData,
+  fetchPlannerDays,
+  savePlannerDay,
+} from "./sync.js";
 
 /* ---------------------------------------------------------- */
 /* State                                                       */
@@ -17,6 +23,22 @@ let { key: currentDayKey, data: state } = loadToday(config.seedData);
 
 function persist() {
   saveDay(currentDayKey, state);
+}
+
+async function syncPlanner() {
+  const remoteDays = await fetchPlannerDays(config.plannerApiUrl);
+  mergeDays(remoteDays);
+  const todayData = remoteDays[currentDayKey];
+  if (todayData) {
+    state = todayData;
+    focusInput.value = state.focus || "";
+    renderEvents();
+    renderTodos();
+    renderNotes();
+    renderProtein();
+    renderCalories();
+  }
+  await savePlannerDay(config.plannerApiUrl, currentDayKey, state);
 }
 
 function makeId() {
@@ -982,6 +1004,19 @@ function flashSyncBadge(text, cls) {
 }
 
 syncBtn.addEventListener("click", async () => {
+  if (config.syncMode === "notion-cloud") {
+    flashSyncBadge("● syncing…", "sync-local");
+    try {
+      persist();
+      await syncPlanner();
+      flashSyncBadge("● synced everywhere", "sync-synced");
+    } catch (err) {
+      console.warn("Cloud planner sync failed:", err);
+      flashSyncBadge("● sync failed", "sync-error");
+    }
+    return;
+  }
+
   if (config.syncMode !== "notion") {
     persist();
     flashSyncBadge("● saved ✓", "sync-synced");
@@ -1001,6 +1036,12 @@ syncBtn.addEventListener("click", async () => {
     flashSyncBadge("● sync failed", "sync-error");
   }
 });
+
+if (config.syncMode === "notion-cloud") {
+  syncPlanner()
+    .then(() => flashSyncBadge("● synced everywhere", "sync-synced"))
+    .catch((err) => console.warn("Initial cloud planner sync failed:", err));
+}
 
 /* ---------------------------------------------------------- */
 /* Widget chrome: drag, minimize, pin to corner, fullscreen     */
@@ -1034,14 +1075,14 @@ function endDrag() {
 }
 
 widgetDrag.addEventListener("mousedown", (e) => {
-  if (e.target.closest("button")) return;
+  if (e.target.closest("button, a, .notion-connect-menu")) return;
   startDrag(e.clientX, e.clientY);
 });
 window.addEventListener("mousemove", (e) => moveDrag(e.clientX, e.clientY));
 window.addEventListener("mouseup", endDrag);
 
 widgetDrag.addEventListener("touchstart", (e) => {
-  if (e.target.closest("button")) return;
+  if (e.target.closest("button, a, .notion-connect-menu")) return;
   const t = e.touches[0];
   startDrag(t.clientX, t.clientY);
 });

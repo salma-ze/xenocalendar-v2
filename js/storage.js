@@ -74,6 +74,14 @@ function writeAllDays(days) {
   }
 }
 
+export function mergeDays(remoteDays) {
+  const days = readAllDays();
+  Object.entries(remoteDays || {}).forEach(([key, day]) => {
+    days[key] = withIds(day);
+  });
+  writeAllDays(days);
+}
+
 // Loads (or creates) today's record. If this is the very first time
 // XenoCalendar has ever run here, today is seeded with sample data;
 // otherwise a new day just starts blank — like tearing off a fresh

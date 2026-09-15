@@ -65,6 +65,7 @@ The original project uses Notion + an AI agent to populate data daily. XenoCalen
 | Time | Text | Events only, e.g. `10:00–11:00` |
 | Link | URL | Optional meeting link |
 | Done | Checkbox | Tasks only |
+| Data | Text | Full XenoCalendar day data for shared sync |
 
 Share the database with your [Notion integration](https://www.notion.so/my-integrations).
 
@@ -75,7 +76,26 @@ Deploy to Vercel (drop this folder in) and set env vars from `.env.example`:
 - `NOTION_TOKEN` — integration secret
 - `NOTION_DATABASE_ID` — from the database URL
 
-The endpoint lives at `/api/notion`.
+The task/event endpoint lives at `/api/notion`.
+
+### Shared devices and history
+
+For two-way sync across phones, tablets, and computers, use the `Data` property
+above. XenoCalendar stores one complete day (tasks, events, notes, focus,
+protein, calories, and history) in one Notion row. The shared endpoint is
+`/api/planner`.
+
+After the database has the `Data` property and the Vercel variables are set,
+change `js/config.js`:
+
+```js
+syncMode: "notion-cloud",
+plannerApiUrl: "/api/planner",
+```
+
+The app loads shared days when it opens and the sync button both downloads and
+uploads the current day. Changes use last-write-wins, which is appropriate when
+one person moves between devices.
 
 ### 3. Enable sync in the app
 

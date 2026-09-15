@@ -75,10 +75,11 @@ export const config = {
   //    or into browser code.
   // 6. If the app and API use the same Vercel domain, keep notionApiUrl
   //    as "/api/notion". Otherwise, use your deployed API URL.
-  // 7. Change syncMode to "notion", reload the app, then click the sync
-  //    button (↻). Today's Notion tasks and events will be imported.
+  // 7. Change syncMode to "notion-cloud" after adding the Data property
+  //    described in README. This enables shared days and history.
   // 8. If sync fails, check the database was shared with the integration,
   //    the property names match step 1, and both Vercel variables are set.
-  syncMode: "local", // "local" | "notion"
+  syncMode: "local", // "local" | "notion" | "notion-cloud"
   notionApiUrl: "/api/notion",
+  plannerApiUrl: "/api/planner",
 };

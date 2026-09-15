@@ -29,3 +29,30 @@ export function mergeNotionData(state, notionData) {
     tasks: [...localTasks, ...notionData.tasks],
   };
 }
+
+export async function fetchPlannerDays(apiUrl) {
+  const response = await fetch(apiUrl, { method: "GET" });
+  if (!response.ok) throw new Error(`Planner sync failed (${response.status})`);
+  const data = await response.json();
+  if (!data.days || typeof data.days !== "object") {
+    throw new Error("Unexpected response from the planner sync endpoint.");
+  }
+  return data.days;
+}
+
+export async function savePlannerDay(apiUrl, key, data) {
+  const response = await fetch(apiUrl, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ key, data }),
+  });
+  if (!response.ok) {
+    let detail = "";
+    try {
+      detail = (await response.json()).error || "";
+    } catch (_) {
+      // The response was not JSON.
+    }
+    throw new Error(detail || `Planner save failed (${response.status})`);
+  }
+}
