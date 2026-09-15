@@ -4,6 +4,8 @@ An interactive **daily planner printer** — inspired by xenorphia.exe virgoism.
 
 Built as a gift for someone who loves organization ✦
 
+Tech stack below <3
+
 ## What it does
 
 - **Print my day** — animated receipt printer with typewriter heading
