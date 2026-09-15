@@ -1,8 +1,10 @@
 # XenoCalendar
 
-An interactive **daily planner printer** — inspired by [digital-typewriter](https://github.com/nasha-wanich/digital-typewriter). Press print, watch your day roll out on a cute receipt, check off tasks with sparkles, and optionally sync from Notion.
+An interactive **daily planner printer** — inspired by xenorphia.exe virgoism. Press print, watch your day roll out on a cute receipt, check off tasks with sparkles, and optionally sync from Notion.
 
 Built as a gift for someone who loves organization ✦
+
+Tech stack below <3
 
 ## What it does
 
@@ -14,7 +16,7 @@ Built as a gift for someone who loves organization ✦
 - **Notion sync** (optional) — pull today’s tasks & events from a Notion database
 - **Auto-refresh** — re-sync every N minutes when connected
 
-## Widget mode (keep it on her screen)
+## Widget mode (screenmaxxing)
 
 XenoCalendar opens as a **floating desktop widget**:
 
@@ -25,11 +27,11 @@ XenoCalendar opens as a **floating desktop widget**:
 
 ### Install as a desktop app (recommended)
 
-1. Open in **Chrome** or **Edge**
+1. Open in brave
 2. Click the install icon in the address bar (or menu → *Install XenoCalendar*)
 3. Pin the small window to a corner — it stays on her desktop like a widget
 
-On Windows, she can also right-click the taskbar app → *Always on top* if using a tool like PowerToys, or keep the installed PWA window small in a corner.
+On Windows, you can also right-click the taskbar app → *Always on top* if using a tool like PowerToys, or keep the installed PWA window small in a corner.
 
 ```bash
 npm run dev
@@ -37,7 +39,7 @@ npm run dev
 
 Open http://localhost:3000 — works immediately with sample data.
 
-## Personalize for her
+## Personalized for xen
 
 Edit `js/config.js`:
 
